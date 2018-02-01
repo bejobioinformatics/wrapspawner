@@ -72,6 +72,9 @@ class WrapSpawner(Spawner):
                 db   = self.db,
                 hub  = self.hub,
                 authenticator = self.authenticator,
+                # https://github.com/jupyterhub/wrapspawner/pull/16/files?diff=unified
+                oauth_client_id = self.oauth_client_id,
+                server = self._server,
                 config = self.config,
                 **self.child_config
                 )
@@ -208,7 +211,8 @@ class ProfilesSpawner(WrapSpawner):
         try:
             self.child_profile = state['profile']
         except KeyError:
-            raise KeyError('jupyterhub database might be outdated, please reset it, in the default configuration, just delete jupyterhub.sqlite')
+            #https://github.com/jupyterhub/wrapspawner/pull/16/files?diff=unified
+            self.child_profile = ''
         self.select_profile(self.child_profile)
 
     def get_state(self):
@@ -292,4 +296,3 @@ class DockerProfilesSpawner(ProfilesSpawner):
 
 
 # vim: set ai expandtab softtabstop=4:
-
